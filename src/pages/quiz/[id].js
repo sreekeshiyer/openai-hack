@@ -43,17 +43,21 @@ import { HOST_URL } from "@/config/index";
 const Quiz = ({ questions }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
+    const [enabledButton, setButtonStatus] = useState(true);
 
     const handleOptionClick = (correct) => {
+        setButtonStatus(false);
+        console.log(enabledButton);
+
         if (correct) {
             setScore(score + 1);
-            toast.success("Correct!", { autoClose: 2000 });
+            toast.success("Correct!", { autoClose: 100 });
         } else {
-            toast.error("Wrong answer", { autoClose: 2000 });
+            toast.error("Wrong answer", { autoClose: 100 });
         }
-        setTimeout(() => {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-        }, 2000);
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+
+        setButtonStatus(true);
     };
 
     const currentQuestion = questions[currentQuestionIndex];
@@ -85,6 +89,9 @@ const Quiz = ({ questions }) => {
                                                         handleOptionClick(
                                                             option.correct
                                                         )
+                                                    }
+                                                    disabled={
+                                                        enabledButton === false
                                                     }
                                                 >
                                                     {option.text}
